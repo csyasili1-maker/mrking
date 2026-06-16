@@ -1,0 +1,30 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/services",
+      "destination": "/services.html"
+    },
+    {
+      "source": "/subsidy",
+      "destination": "/subsidy.html"
+    },
+    {
+      "source": "/business",
+      "destination": "/business.html"
+    },
+    {
+      "source": "/gallery",
+      "destination": "/gallery.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
+    }
+  ]
+}
