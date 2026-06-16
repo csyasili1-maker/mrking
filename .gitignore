@@ -1,0 +1,4 @@
+.server-pid.txt
+.server-port.txt
+server.out.log
+server.err.log
