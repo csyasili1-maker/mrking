@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | MR. KING Solar Portal</title>
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/mrking-site.css">
+</head>
+<body data-panel="admin">
+  <div class="site-loader" aria-hidden="true"><span></span></div>
+  <header class="site-header"><a class="brand" href="/"><img src="/assets/mrking/brand-poster-black.jpg" alt="MR. KING logo"><span>MR. KING <small>Solar Consultancy</small></span></a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">Menu</button><nav class="site-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/affiliate-panel">Affiliate Panel</a><a href="/vendor-panel">Vendor Panel</a><a href="/admin-panel">Admin Panel</a><a href="/contact">Contact</a></nav><button class="header-cta" type="button" data-logout>Logout</button></header>
+  <main class="portal-shell">
+    <section class="dashboard-hero">
+      <div class="container">
+        <div><p class="eyebrow">Admin Dashboard</p><h1>Control center for MR. KING.</h1><p>Monitor affiliates, vendors, leads, orders, payout status, and the complete solar business pipeline.</p></div>
+        <div class="dashboard-actions"><a class="primary-btn" href="#manage">Manage Data</a><a class="ghost-btn" href="/signup">Add User</a></div>
+      </div>
+    </section>
+    <div class="container portal-layout">
+      <aside class="portal-sidebar"><a class="active" href="#overview">Overview</a><a href="#manage">Manage</a><a href="#reports">Reports</a><a href="#settings">Settings</a><button type="button" data-logout>Logout</button></aside>
+      <div class="portal-main">
+        <section id="overview" class="metric-grid">
+          <div class="metric-card"><span>Total Users</span><strong data-metric="users">0</strong><small>Affiliates, vendors, admins</small></div>
+          <div class="metric-card"><span>Total Leads</span><strong data-metric="leads">0</strong><small>Customer pipeline</small></div>
+          <div class="metric-card"><span>Orders</span><strong data-metric="orders">0</strong><small>Installation flow</small></div>
+          <div class="metric-card"><span>Payouts</span><strong data-metric="payouts">0</strong><small>Commission entries</small></div>
+        </section>
+        <section id="manage" class="dashboard-card">
+          <h3>Manage All Data</h3>
+          <div class="admin-tabs">
+            <button class="active" type="button" data-admin-tab="users-tab">Users</button>
+            <button type="button" data-admin-tab="leads-tab">Leads</button>
+            <button type="button" data-admin-tab="orders-tab">Orders</button>
+            <button type="button" data-admin-tab="payouts-tab">Payouts</button>
+          </div>
+        </section>
+        <section id="users-tab" class="portal-table admin-section active"><header><h3>Users</h3><span class="status-pill hot">Manage Accounts</span></header><table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Phone</th><th>Status</th></tr></thead><tbody data-admin-users></tbody></table></section>
+        <section id="leads-tab" class="portal-table admin-section"><header><h3>Leads</h3><span class="status-pill pending">Customer Data</span></header><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Area</th><th>Capacity</th><th>Status</th></tr></thead><tbody data-admin-leads></tbody></table></section>
+        <section id="orders-tab" class="portal-table admin-section"><header><h3>Orders</h3><span class="status-pill closed">Vendor Work</span></header><table><thead><tr><th>ID</th><th>Customer</th><th>Vendor</th><th>Capacity</th><th>Value</th><th>Status</th></tr></thead><tbody data-admin-orders></tbody></table></section>
+        <section id="payouts-tab" class="portal-table admin-section"><header><h3>Payouts</h3><span class="status-pill hot">Commission</span></header><table><thead><tr><th>ID</th><th>Affiliate</th><th>Level</th><th>Systems</th><th>Amount</th><th>Status</th></tr></thead><tbody data-admin-payouts></tbody></table></section>
+        <section id="reports" class="dashboard-grid">
+          <div class="dashboard-card"><h3>Business Reports</h3><div class="timeline-list"><article><h4>Lead Sources</h4><p>Track whether customers came from website, affiliate referrals, or direct enquiry.</p></article><article><h4>Vendor Performance</h4><p>Compare survey, quotation, installation, and completion stages.</p></article><article><h4>Commission Control</h4><p>Approve payouts only after installation and payment clearance.</p></article></div></div>
+          <div id="settings" class="profile-card"><h3>Admin Settings</h3><p>Logged in as <strong data-user-name>Admin</strong>.</p><p class="portal-note">For production, connect this panel to a database, OTP/password authentication, admin permissions, payout approval workflow, and secure file uploads.</p></div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <script src="/assets/mrking-site.js"></script>
+  <script src="/assets/mrking-portal.js?v=2"></script>
+</body>
+</html>

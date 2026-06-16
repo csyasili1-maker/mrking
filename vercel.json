@@ -31,6 +31,26 @@
     {
       "src": "/contact",
       "dest": "/contact.html"
+    },
+    {
+      "src": "/login",
+      "dest": "/login.html"
+    },
+    {
+      "src": "/signup",
+      "dest": "/signup.html"
+    },
+    {
+      "src": "/affiliate-panel",
+      "dest": "/affiliate-panel.html"
+    },
+    {
+      "src": "/vendor-panel",
+      "dest": "/vendor-panel.html"
+    },
+    {
+      "src": "/admin-panel",
+      "dest": "/admin-panel.html"
     }
   ]
 }

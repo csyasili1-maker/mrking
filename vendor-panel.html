@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Panel | MR. KING Solar Portal</title>
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/mrking-site.css">
+</head>
+<body data-panel="vendor">
+  <div class="site-loader" aria-hidden="true"><span></span></div>
+  <header class="site-header"><a class="brand" href="/"><img src="/assets/mrking/brand-poster-black.jpg" alt="MR. KING logo"><span>MR. KING <small>Solar Consultancy</small></span></a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">Menu</button><nav class="site-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/services">Services</a><a href="/affiliate-panel">Affiliate Panel</a><a href="/vendor-panel">Vendor Panel</a><a href="/admin-panel">Admin Panel</a></nav><button class="header-cta" type="button" data-logout>Logout</button></header>
+  <main class="portal-shell">
+    <section class="dashboard-hero">
+      <div class="container">
+        <div><p class="eyebrow">Vendor Dashboard</p><h1>Installation work center.</h1><p>Manage MR. KING assigned customers, quotations, site surveys, installation progress, and service quality.</p></div>
+        <div class="dashboard-actions"><a class="primary-btn" href="#orders">View Orders</a><a class="ghost-btn" href="/contact">Support</a></div>
+      </div>
+    </section>
+    <div class="container portal-layout">
+      <aside class="portal-sidebar"><a class="active" href="#overview">Overview</a><a href="#orders">Orders</a><a href="#services">Services</a><a href="#profile">Profile</a><button type="button" data-logout>Logout</button></aside>
+      <div class="portal-main">
+        <section id="overview" class="metric-grid">
+          <div class="metric-card"><span>Assigned Orders</span><strong data-metric="orders">0</strong><small>MR. KING pipeline</small></div>
+          <div class="metric-card"><span>Installed</span><strong data-metric="installed">0</strong><small>Completed systems</small></div>
+          <div class="metric-card"><span>Pipeline Value</span><strong data-metric="pipeline">Rs. 0</strong><small>Demo estimate</small></div>
+          <div class="metric-card"><span>Service Rating</span><strong data-metric="rating">4.8</strong><small>Quality score</small></div>
+        </section>
+        <section class="dashboard-grid">
+          <div id="services" class="dashboard-card">
+            <h3>Vendor Services</h3>
+            <div class="timeline-list">
+              <article><h4>Site Survey</h4><p>Roof inspection, shadow check, structure planning, and feasibility note.</p></article>
+              <article><h4>Quotation</h4><p>Capacity-based proposal for 2KW, 3KW, 5KW, and commercial systems.</p></article>
+              <article><h4>Installation</h4><p>Panels, inverter, wiring, earthing, testing, and handover coordination.</p></article>
+            </div>
+          </div>
+          <form class="lead-form settings-form">
+            <h3>Update Vendor Capacity</h3>
+            <label>Monthly Capacity<select><option>10 systems</option><option>25 systems</option><option>50 systems</option><option>100 systems</option></select></label>
+            <label>Service Area<input value="Krishna, Guntur"></label>
+            <label>Primary Category<select><option>Residential Rooftop</option><option>Commercial Solar</option><option>Maintenance</option></select></label>
+            <button class="primary-btn full" type="button">Save Demo Settings</button>
+          </form>
+        </section>
+        <section id="orders" class="portal-table"><header><h3>Assigned Orders</h3><span class="status-pill hot">Vendor Data</span></header><table><thead><tr><th>Order</th><th>Customer</th><th>Capacity</th><th>Value</th><th>Status</th></tr></thead><tbody data-vendor-orders></tbody></table></section>
+        <section id="profile" class="profile-card"><h3>Vendor Profile</h3><p>Name: <strong data-user-name>Vendor</strong></p><p>Role: <strong data-user-role>vendor</strong></p><p class="portal-note">Admin can verify vendors, assign leads, monitor installation status, and review service performance in the admin panel.</p></section>
+      </div>
+    </div>
+  </main>
+  <script src="/assets/mrking-site.js"></script>
+  <script src="/assets/mrking-portal.js?v=2"></script>
+</body>
+</html>

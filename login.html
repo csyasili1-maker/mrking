@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | MR. KING Solar Portal</title>
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/mrking-site.css">
+</head>
+<body>
+  <div class="site-loader" aria-hidden="true"><span></span></div>
+  <header class="site-header"><a class="brand" href="/"><img src="/assets/mrking/brand-poster-black.jpg" alt="MR. KING logo"><span>MR. KING <small>Solar Consultancy</small></span></a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">Menu</button><nav class="site-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/subsidy">PM Surya Ghar</a><a href="/business">Business Plan</a><a href="/gallery">Gallery</a><a href="/contact">Contact</a><a href="/login">Portal</a></nav><a class="header-cta" href="/signup">Join Now</a></header>
+  <main>
+    <section class="portal-hero">
+      <div class="container">
+        <div class="auth-wrap">
+          <div>
+            <p class="eyebrow">MR. KING Portal</p>
+            <h1>Login to manage solar growth.</h1>
+            <p>Affiliates can track referrals, vendors can manage installations, and admins can monitor the complete MR. KING solar network from one place.</p>
+            <div class="role-grid">
+              <div class="role-card"><strong>Affiliate</strong><span>Add leads, track commission, view level progress.</span></div>
+              <div class="role-card"><strong>Vendor</strong><span>Manage assigned orders, surveys, quotations, and installation status.</span></div>
+              <div class="role-card"><strong>Admin</strong><span>View users, leads, vendors, orders, payouts, and business data.</span></div>
+            </div>
+          </div>
+          <form class="auth-panel" data-login-form>
+            <h2>Account Login</h2>
+            <p class="portal-note">Demo mode: choose any role and continue. Secure OTP/password login needs backend integration.</p>
+            <label>Email<input type="email" name="email" value="affiliate@mrking.demo" required></label>
+            <label>Password<input type="password" name="password" value="mrking123" required></label>
+            <label>Login As<select name="role"><option value="affiliate">Affiliate</option><option value="vendor">Vendor</option><option value="admin">Admin</option></select></label>
+            <button class="primary-btn full" type="submit">Login</button>
+            <div class="demo-logins">
+              <a href="/affiliate-panel">Affiliate Demo</a>
+              <a href="/vendor-panel">Vendor Demo</a>
+              <a href="/admin-panel">Admin Demo</a>
+            </div>
+            <p>New partner? <a href="/signup"><strong>Create account</strong></a></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="/assets/mrking-site.js"></script>
+  <script src="/assets/mrking-portal.js?v=2"></script>
+</body>
+</html>

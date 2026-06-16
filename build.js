@@ -12,6 +12,11 @@ const files = [
   "business.html",
   "gallery.html",
   "contact.html",
+  "login.html",
+  "signup.html",
+  "affiliate-panel.html",
+  "vendor-panel.html",
+  "admin-panel.html",
   "favicon.png",
 ];
 

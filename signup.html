@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup | MR. KING Solar Portal</title>
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/mrking-site.css">
+</head>
+<body>
+  <div class="site-loader" aria-hidden="true"><span></span></div>
+  <header class="site-header"><a class="brand" href="/"><img src="/assets/mrking/brand-poster-black.jpg" alt="MR. KING logo"><span>MR. KING <small>Solar Consultancy</small></span></a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">Menu</button><nav class="site-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/subsidy">PM Surya Ghar</a><a href="/business">Business Plan</a><a href="/gallery">Gallery</a><a href="/contact">Contact</a><a href="/login">Portal</a></nav><a class="header-cta" href="/login">Login</a></header>
+  <main>
+    <section class="portal-hero">
+      <div class="container">
+        <div class="auth-wrap">
+          <div>
+            <p class="eyebrow">Join MR. KING</p>
+            <h1>Create your solar partner account.</h1>
+            <p>Register as an affiliate to refer customers, as a vendor to receive installation work, or as admin for internal team access.</p>
+            <div class="role-grid">
+              <div class="role-card"><strong>No Investment</strong><span>The shared plan highlights no joining fee and no renewal fee for affiliates.</span></div>
+              <div class="role-card"><strong>Lead Tracking</strong><span>Every referral can be tracked with status, area, capacity, and payout progress.</span></div>
+              <div class="role-card"><strong>Managed Network</strong><span>Admins can supervise affiliates, vendors, customers, orders, and payouts.</span></div>
+            </div>
+          </div>
+          <form class="auth-panel" data-signup-form>
+            <h2>Create Account</h2>
+            <label>Full Name<input type="text" name="name" placeholder="Enter full name" required></label>
+            <label>Mobile Number<input type="tel" name="phone" placeholder="Enter WhatsApp number" required></label>
+            <label>Email<input type="email" name="email" placeholder="name@example.com" required></label>
+            <label>Password<input type="password" name="password" placeholder="Create password" required></label>
+            <label>Join As<select name="role"><option value="affiliate">Affiliate Partner</option><option value="vendor">Vendor / Installer</option><option value="admin">Admin Team</option></select></label>
+            <button class="primary-btn full" type="submit">Create Account</button>
+            <p>Already registered? <a href="/login"><strong>Login here</strong></a></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="/assets/mrking-site.js"></script>
+  <script src="/assets/mrking-portal.js?v=2"></script>
+</body>
+</html>

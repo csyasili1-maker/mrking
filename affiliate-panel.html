@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Affiliate Panel | MR. KING Solar Portal</title>
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/mrking-site.css">
+</head>
+<body data-panel="affiliate">
+  <div class="site-loader" aria-hidden="true"><span></span></div>
+  <header class="site-header"><a class="brand" href="/"><img src="/assets/mrking/brand-poster-black.jpg" alt="MR. KING logo"><span>MR. KING <small>Solar Consultancy</small></span></a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">Menu</button><nav class="site-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/business">Business Plan</a><a href="/affiliate-panel">Affiliate Panel</a><a href="/vendor-panel">Vendor Panel</a><a href="/admin-panel">Admin Panel</a></nav><button class="header-cta" type="button" data-logout>Logout</button></header>
+  <main class="portal-shell">
+    <section class="dashboard-hero">
+      <div class="container">
+        <div><p class="eyebrow">Affiliate Dashboard</p><h1>Welcome, <span data-user-name>Partner</span>.</h1><p>Track leads, commissions, level progress, and your MR. KING referral activity.</p></div>
+        <div class="dashboard-actions"><a class="primary-btn" href="#add-lead">Add Lead</a><a class="ghost-btn" href="/business">View Plan</a></div>
+      </div>
+    </section>
+    <div class="container portal-layout">
+      <aside class="portal-sidebar"><a class="active" href="#overview">Overview</a><a href="#leads">My Leads</a><a href="#commission">Commission</a><a href="#profile">Profile</a><button type="button" data-logout>Logout</button></aside>
+      <div class="portal-main">
+        <section id="overview" class="metric-grid">
+          <div class="metric-card"><span>Total Leads</span><strong data-metric="leads">0</strong><small>Referral pipeline</small></div>
+          <div class="metric-card"><span>Closed Systems</span><strong data-metric="closed">0</strong><small>Eligible sales</small></div>
+          <div class="metric-card"><span>Projected Income</span><strong data-metric="income">Rs. 0</strong><small>Demo estimate</small></div>
+          <div class="metric-card"><span>Current Level</span><strong data-metric="level">Agent</strong><small>Before 20th target</small></div>
+        </section>
+        <section class="dashboard-grid">
+          <form id="add-lead" class="lead-form" data-lead-form>
+            <h3>Add Customer Lead</h3>
+            <label>Customer Name<input name="name" required placeholder="Customer full name"></label>
+            <label>Phone Number<input name="phone" required placeholder="Customer mobile number"></label>
+            <label>Area<input name="area" required placeholder="Krishna / Guntur / Town"></label>
+            <label>System Capacity<select name="capacity"><option>2KW</option><option>3KW</option><option>5KW</option><option>Commercial</option></select></label>
+            <button class="primary-btn full" type="submit">Submit Lead</button>
+          </form>
+          <div id="commission" class="dashboard-card">
+            <h3>Referral Link</h3>
+            <p>Share this link with prospects. New signup data is saved in demo mode and visible to admin.</p>
+            <div class="copy-box"><code data-referral-link>https://mrking-eight.vercel.app/signup</code><a class="soft-btn" href="/signup">Open</a></div>
+            <div class="timeline-list" style="margin-top:18px">
+              <article><h4>Agent</h4><p>Direct referral income starts from Rs. 5,000 per eligible system.</p></article>
+              <article><h4>Supervisor to Manager</h4><p>Team targets unlock front line and second line income.</p></article>
+              <article><h4>Club Member</h4><p>Higher direct income and special rewards as per the plan.</p></article>
+            </div>
+          </div>
+        </section>
+        <section id="leads" class="portal-table"><header><h3>My Lead Pipeline</h3><span class="status-pill hot">Live Demo</span></header><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Area</th><th>Capacity</th><th>Status</th></tr></thead><tbody data-affiliate-leads></tbody></table></section>
+        <section id="profile" class="profile-card"><h3>Affiliate Profile</h3><p>Name: <strong data-user-name>Partner</strong></p><p>Role: <strong data-user-role>affiliate</strong></p><p class="portal-note">This is a front-end demo panel. Real commission approval, KYC, payment status, and secure login need backend/database connection.</p></section>
+      </div>
+    </div>
+  </main>
+  <script src="/assets/mrking-site.js"></script>
+  <script src="/assets/mrking-portal.js?v=2"></script>
+</body>
+</html>
