@@ -1,30 +1,33 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/about",
-      "destination": "/about.html"
+      "handle": "filesystem"
     },
     {
-      "source": "/services",
-      "destination": "/services.html"
+      "src": "/about",
+      "dest": "/about.html"
     },
     {
-      "source": "/subsidy",
-      "destination": "/subsidy.html"
+      "src": "/services",
+      "dest": "/services.html"
     },
     {
-      "source": "/business",
-      "destination": "/business.html"
+      "src": "/subsidy",
+      "dest": "/subsidy.html"
     },
     {
-      "source": "/gallery",
-      "destination": "/gallery.html"
+      "src": "/business",
+      "dest": "/business.html"
     },
     {
-      "source": "/contact",
-      "destination": "/contact.html"
+      "src": "/gallery",
+      "dest": "/gallery.html"
+    },
+    {
+      "src": "/contact",
+      "dest": "/contact.html"
     }
   ]
 }
