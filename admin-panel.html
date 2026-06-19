@@ -39,23 +39,27 @@
           <h3>Manage All Data</h3>
           <div class="admin-tabs">
             <button class="active" type="button" data-admin-tab="users-tab">Users</button>
+            <button type="button" data-admin-tab="applications-tab">Applications</button>
             <button type="button" data-admin-tab="leads-tab">Leads</button>
             <button type="button" data-admin-tab="orders-tab">Orders</button>
             <button type="button" data-admin-tab="payouts-tab">Payouts</button>
+            <button type="button" data-admin-tab="earners-tab">Top Earners</button>
           </div>
         </section>
-        <section id="users-tab" class="portal-table admin-section active"><header><h3>Users</h3><span class="status-pill hot">Manage Accounts</span></header><table><thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Phone</th><th>Status</th></tr></thead><tbody data-admin-users></tbody></table></section>
-        <section id="leads-tab" class="portal-table admin-section"><header><h3>Leads</h3><span class="status-pill pending">Customer Data</span></header><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Area</th><th>Capacity</th><th>Status</th></tr></thead><tbody data-admin-leads></tbody></table></section>
+        <section id="users-tab" class="portal-table admin-section active"><header><h3>Users</h3><span class="status-pill hot">ID Number System</span></header><table><thead><tr><th>ID Number</th><th>Name</th><th>Role</th><th>Phone</th><th>Status</th></tr></thead><tbody data-admin-users></tbody></table></section>
+        <section id="applications-tab" class="portal-table admin-section"><header><h3>Applications & Agreement</h3><span class="status-pill hot">Join Requests</span></header><table><thead><tr><th>Application ID</th><th>Name</th><th>Role</th><th>Area</th><th>Agreement</th><th>Status</th></tr></thead><tbody data-admin-applications></tbody></table></section>
+        <section id="leads-tab" class="portal-table admin-section"><header><h3>Leads</h3><span class="status-pill pending">Area Mentioned Data</span></header><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>District</th><th>Area</th><th>Capacity</th><th>Status</th></tr></thead><tbody data-admin-leads></tbody></table></section>
         <section id="orders-tab" class="portal-table admin-section"><header><h3>Orders</h3><span class="status-pill closed">Vendor Work</span></header><table><thead><tr><th>ID</th><th>Customer</th><th>Vendor</th><th>Capacity</th><th>Value</th><th>Status</th></tr></thead><tbody data-admin-orders></tbody></table></section>
-        <section id="payouts-tab" class="portal-table admin-section"><header><h3>Payouts</h3><span class="status-pill hot">Commission</span></header><table><thead><tr><th>ID</th><th>Affiliate</th><th>Level</th><th>Systems</th><th>Amount</th><th>Status</th></tr></thead><tbody data-admin-payouts></tbody></table></section>
+        <section id="payouts-tab" class="portal-table admin-section"><header><h3>Payment System</h3><span class="status-pill hot">Commission Payouts</span></header><table><thead><tr><th>ID</th><th>Affiliate</th><th>Level</th><th>Systems</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead><tbody data-admin-payouts></tbody></table></section>
+        <section id="earners-tab" class="portal-table admin-section"><header><h3>Monthly Top Earners</h3><span class="status-pill closed">Leaderboard</span></header><table><thead><tr><th>Rank</th><th>ID</th><th>Name</th><th>Area</th><th>Systems</th><th>Income</th></tr></thead><tbody data-admin-earners></tbody></table></section>
         <section id="reports" class="dashboard-grid">
-          <div class="dashboard-card"><h3>Business Reports</h3><div class="timeline-list"><article><h4>Lead Sources</h4><p>Track whether customers came from website, affiliate referrals, or direct enquiry.</p></article><article><h4>Vendor Performance</h4><p>Compare survey, quotation, installation, and completion stages.</p></article><article><h4>Commission Control</h4><p>Approve payouts only after installation and payment clearance.</p></article></div></div>
+          <div class="dashboard-card"><h3>How Automation Works</h3><div class="timeline-list"><article><h4>1. Application Submitted</h4><p>Signup captures role, area, agreement acceptance, and creates a unique ID number.</p></article><article><h4>2. Lead Added With Area</h4><p>Affiliate submits customer lead with district, mandal/area, phone, and system capacity.</p></article><article><h4>3. Admin Assigns Work</h4><p>Admin verifies data, assigns vendor, tracks order status, and updates payout readiness.</p></article><article><h4>4. Monthly Payout & Top Earners</h4><p>Payment status and leaderboard are updated after installation and payment clearance.</p></article></div></div>
           <div id="settings" class="profile-card"><h3>Admin Settings</h3><p>Logged in as <strong data-user-name>Admin</strong>.</p><p class="portal-note">For production, connect this panel to a database, OTP/password authentication, admin permissions, payout approval workflow, and secure file uploads.</p></div>
         </section>
       </div>
     </div>
   </main>
   <script src="/assets/mrking-site.js"></script>
-  <script src="/assets/mrking-portal.js?v=2"></script>
+  <script src="/assets/mrking-portal.js?v=3"></script>
 </body>
 </html>

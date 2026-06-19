@@ -18,7 +18,7 @@
 </head>
 <body>
   <div class="site-loader" aria-hidden="true"><span></span></div>
-  <header class="site-header"><a class="brand" href="/"><img src="/assets/mrking/main-logo.png" alt="MR. KING logo"><span>MR. KING <small>Solar Consultancy</small></span></a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">Menu</button><nav class="site-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/subsidy">PM Surya Ghar</a><a href="/business">Business Plan</a><a href="/gallery">Gallery</a><a href="/contact">Contact</a><a href="/login">Portal</a></nav><a class="header-cta" href="/login">Login</a></header>
+  <header class="site-header"><a class="brand" href="/"><img src="/assets/mrking/main-logo.png" alt="MR. KING logo"><span>MR. KING <small>Solar Consultancy</small></span></a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false">Menu</button><nav class="site-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/subsidy">PM Surya Ghar</a><a href="/business">Business Plan</a><a href="/gallery">Gallery</a><a href="/contact">Contact</a><a href="/login">Portal</a></nav><a class="header-cta" href="/signup">Join Now</a></header>
   <main>
     <section class="portal-hero">
       <div class="container">
@@ -37,17 +37,38 @@
             <h2>Create Account</h2>
             <label>Full Name<input type="text" name="name" placeholder="Enter full name" required></label>
             <label>Mobile Number<input type="tel" name="phone" placeholder="Enter WhatsApp number" required></label>
+            <label>Area / District<input type="text" name="area" placeholder="Example: Guntur, Krishna, Vijayawada" required></label>
             <label>Email<input type="email" name="email" placeholder="name@example.com" required></label>
             <label>Password<input type="password" name="password" placeholder="Create password" required></label>
             <label>Join As<select name="role"><option value="affiliate">Affiliate Partner</option><option value="vendor">Vendor / Installer</option><option value="admin">Admin Team</option></select></label>
-            <button class="primary-btn full" type="submit">Create Account</button>
+            <label class="check-row"><input type="checkbox" name="agreement" required><span>I accept the MR. KING application agreement, monthly target rules, payment clearance policy, and anti-fraud terms.</span></label>
+            <button class="primary-btn full" type="submit">Join Now</button>
             <p>Already registered? <a href="/login"><strong>Login here</strong></a></p>
           </form>
         </div>
       </div>
     </section>
+    <section class="section">
+      <div class="container dashboard-grid">
+        <div class="dashboard-card">
+          <p class="eyebrow">Application</p>
+          <h2>Simple partner application flow.</h2>
+          <div class="timeline-list">
+            <article><h4>1. Submit Application</h4><p>Partner enters name, WhatsApp number, area, role, and accepts agreement terms.</p></article>
+            <article><h4>2. ID Number Generated</h4><p>System creates a unique MR. KING ID for affiliate, vendor, or admin team access.</p></article>
+            <article><h4>3. Admin Review</h4><p>Admin can verify application, approve agreement, and monitor all partner data.</p></article>
+          </div>
+        </div>
+        <div class="dashboard-card">
+          <p class="eyebrow">Agreement Rules</p>
+          <h2>Clear terms before joining.</h2>
+          <p>Targets close before the 20th of every month. Incentives depend on successful installation and payment clearance. Fraudulent activity may lead to suspension or termination.</p>
+          <a class="primary-btn" href="/business">View Affiliate Chart</a>
+        </div>
+      </div>
+    </section>
   </main>
   <script src="/assets/mrking-site.js"></script>
-  <script src="/assets/mrking-portal.js?v=2"></script>
+  <script src="/assets/mrking-portal.js?v=3"></script>
 </body>
 </html>

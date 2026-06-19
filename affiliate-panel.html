@@ -27,7 +27,7 @@
       </div>
     </section>
     <div class="container portal-layout">
-      <aside class="portal-sidebar"><a class="active" href="#overview">Overview</a><a href="#leads">My Leads</a><a href="#commission">Commission</a><a href="#profile">Profile</a><button type="button" data-logout>Logout</button></aside>
+      <aside class="portal-sidebar"><a class="active" href="#overview">Overview</a><a href="#leads">My Leads</a><a href="#commission">Commission</a><a href="#payments">Payments</a><a href="#automation">Automation</a><a href="#profile">Profile</a><button type="button" data-logout>Logout</button></aside>
       <div class="portal-main">
         <section id="overview" class="metric-grid">
           <div class="metric-card"><span>Total Leads</span><strong data-metric="leads">0</strong><small>Referral pipeline</small></div>
@@ -36,11 +36,24 @@
           <div class="metric-card"><span>Current Level</span><strong data-metric="level">Agent</strong><small>Before 20th target</small></div>
         </section>
         <section class="dashboard-grid">
+          <div class="dashboard-card">
+            <h3>Partner ID Number</h3>
+            <div class="id-card"><span>MR. KING ID</span><strong data-user-id>MRK-A-0000</strong><small>Use this ID for application, payout, lead, and agreement tracking.</small></div>
+          </div>
+          <div class="dashboard-card">
+            <h3>Next Goal</h3>
+            <p data-next-goal>Supervisor: reach 10 systems</p>
+            <div class="goal-meter"><span style="width:38%"></span></div>
+            <small>Goals follow the affiliate chart: Agent, Supervisor, Manager, Director, MR. KING Club Member.</small>
+          </div>
+        </section>
+        <section class="dashboard-grid">
           <form id="add-lead" class="lead-form" data-lead-form>
             <h3>Add Customer Lead</h3>
             <label>Customer Name<input name="name" required placeholder="Customer full name"></label>
             <label>Phone Number<input name="phone" required placeholder="Customer mobile number"></label>
-            <label>Area<input name="area" required placeholder="Krishna / Guntur / Town"></label>
+            <label>District<select name="district"><option>Guntur</option><option>Krishna</option><option>NTR / Vijayawada</option><option>Other</option></select></label>
+            <label>Area / Mandal<input name="area" required placeholder="Example: Tenali, Guntur Urban, Vijayawada"></label>
             <label>System Capacity<select name="capacity"><option>2KW</option><option>3KW</option><option>5KW</option><option>Commercial</option></select></label>
             <button class="primary-btn full" type="submit">Submit Lead</button>
           </form>
@@ -55,12 +68,27 @@
             </div>
           </div>
         </section>
-        <section id="leads" class="portal-table"><header><h3>My Lead Pipeline</h3><span class="status-pill hot">Live Demo</span></header><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Area</th><th>Capacity</th><th>Status</th></tr></thead><tbody data-affiliate-leads></tbody></table></section>
-        <section id="profile" class="profile-card"><h3>Affiliate Profile</h3><p>Name: <strong data-user-name>Partner</strong></p><p>Role: <strong data-user-role>affiliate</strong></p><p class="portal-note">This is a front-end demo panel. Real commission approval, KYC, payment status, and secure login need backend/database connection.</p></section>
+        <section id="leads" class="portal-table"><header><h3>My Lead Pipeline</h3><span class="status-pill hot">Area Wise Lead Data</span></header><table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>District</th><th>Area</th><th>Capacity</th><th>Status</th></tr></thead><tbody data-affiliate-leads></tbody></table></section>
+        <section id="payments" class="portal-table"><header><h3>Payment System</h3><span class="status-pill pending">Monthly Payouts</span></header><table><thead><tr><th>Payment ID</th><th>Level</th><th>Systems</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead><tbody data-affiliate-payments></tbody></table></section>
+        <section class="dashboard-grid">
+          <div class="dashboard-card">
+            <h3>Monthly Top Earners</h3>
+            <ol class="earner-list" data-top-earners></ol>
+          </div>
+          <div id="automation" class="dashboard-card">
+            <h3>How Automation Works</h3>
+            <div class="timeline-list">
+              <article><h4>Lead Capture</h4><p>Affiliate submits lead with area and system capacity.</p></article>
+              <article><h4>Admin Assignment</h4><p>Admin reviews and assigns the customer to vendor or follow-up team.</p></article>
+              <article><h4>Payment Clearance</h4><p>After installation and payment clearance, payout status moves to approved.</p></article>
+            </div>
+          </div>
+        </section>
+        <section id="profile" class="profile-card"><h3>Affiliate Profile</h3><p>ID: <strong data-user-id>MRK-A-0000</strong></p><p>Name: <strong data-user-name>Partner</strong></p><p>Role: <strong data-user-role>affiliate</strong></p><p class="portal-note">Application, agreement, lead area, payment and ID number systems are active in demo mode. Real production storage needs backend/database connection.</p></section>
       </div>
     </div>
   </main>
   <script src="/assets/mrking-site.js"></script>
-  <script src="/assets/mrking-portal.js?v=2"></script>
+  <script src="/assets/mrking-portal.js?v=3"></script>
 </body>
 </html>
