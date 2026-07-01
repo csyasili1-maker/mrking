@@ -35,12 +35,43 @@
           </div>
           <form class="auth-panel" data-signup-form>
             <h2>Create Account</h2>
+            <div class="demo-access" aria-label="Client demo accounts">
+              <div class="demo-access-head">
+                <span>Client Demo Access</span>
+                <strong>Open any dashboard instantly</strong>
+                <p>No form filling needed. Choose a demo below and show the client directly.</p>
+              </div>
+              <div class="demo-account-grid">
+                <a class="demo-account-card" href="/affiliate-panel">
+                  <span class="demo-badge">Affiliate</span>
+                  <strong>Affiliate Dashboard</strong>
+                  <small>Leads, referral link, wallet, commission, and TDS.</small>
+                  <em>Open Demo</em>
+                </a>
+                <a class="demo-account-card" href="/vendor-panel">
+                  <span class="demo-badge">Vendor</span>
+                  <strong>Vendor Dashboard</strong>
+                  <small>Assigned orders, installation status, and work pipeline.</small>
+                  <em>Open Demo</em>
+                </a>
+                <a class="demo-account-card" href="/admin-panel">
+                  <span class="demo-badge">Admin</span>
+                  <strong>Admin Dashboard</strong>
+                  <small>Users, applications, payouts, referrals, and settings.</small>
+                  <em>Open Demo</em>
+                </a>
+              </div>
+              <p class="demo-login-note">Login password if needed: <strong>mrking123</strong></p>
+            </div>
             <label>Full Name<input type="text" name="name" placeholder="Enter full name" required></label>
             <label>Mobile Number<input type="tel" name="phone" placeholder="Enter WhatsApp number" required></label>
             <label>Area / District<input type="text" name="area" placeholder="Example: Guntur, Krishna, Vijayawada" required></label>
             <label>Email<input type="email" name="email" placeholder="name@example.com" required></label>
             <label>Password<input type="password" name="password" placeholder="Create password" required></label>
             <label>Join As<select name="role"><option value="affiliate">Affiliate Partner</option><option value="vendor">Vendor / Installer</option><option value="admin">Admin Team</option></select></label>
+            <label>Account Category<select name="accountType"><option value="Individual">Individual</option><option value="Proprietorship">Proprietorship</option><option value="Business (B2B)">Business (B2B)</option><option value="Customer (B2C)">Customer (B2C)</option></select></label>
+            <label>Referral Code<input type="text" name="referralCode" data-referral-input placeholder="Optional MR. KING partner ID"></label>
+            <p class="referral-note" data-referral-note>No referral code applied.</p>
             <label class="check-row"><input type="checkbox" name="agreement" required><span>I accept the MR. KING application agreement, monthly target rules, payment clearance policy, and anti-fraud terms.</span></label>
             <button class="primary-btn full" type="submit">Join Now</button>
             <p>Already registered? <a href="/login"><strong>Login here</strong></a></p>
@@ -54,9 +85,9 @@
           <p class="eyebrow">Application</p>
           <h2>Simple partner application flow.</h2>
           <div class="timeline-list">
-            <article><h4>1. Submit Application</h4><p>Partner enters name, WhatsApp number, area, role, and accepts agreement terms.</p></article>
+            <article><h4>1. Submit Application</h4><p>Partner enters name, WhatsApp number, area, role, account category, and accepts agreement terms.</p></article>
             <article><h4>2. ID Number Generated</h4><p>System creates a unique MR. KING ID for affiliate, vendor, or admin team access.</p></article>
-            <article><h4>3. Admin Review</h4><p>Admin can verify application, approve agreement, and monitor all partner data.</p></article>
+            <article><h4>3. Referral & Admin Review</h4><p>A shared affiliate code is linked automatically. Admin can verify the application, agreement, position, and commission.</p></article>
           </div>
         </div>
         <div class="dashboard-card">
@@ -102,12 +133,12 @@
     </div>
   </div>
   <div class="container footer-bottom">
-    <span>© 2026 MR. KING Solar Consultancy. All rights reserved.</span>
+    <span>ï¿½ 2026 MR. KING Solar Consultancy. All rights reserved.</span>
     <span>From the sun. For your kingdom.</span>
   </div>
 </footer>
 
   <script src="/assets/mrking-site.js"></script>
-  <script src="/assets/mrking-portal.js?v=3"></script>
+  <script src="/assets/mrking-portal.js?v=6"></script>
 </body>
 </html>

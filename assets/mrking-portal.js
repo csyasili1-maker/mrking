@@ -1,270 +1,93 @@
-const storeKey = "mrkingPortalState";
-const sessionKey = "mrkingPortalUser";
-
-document.body.dataset.portalReady = "true";
-
-const defaultState = {
-  users: [
-    { id: "MRK-A-1001", name: "Ravi Kumar", email: "affiliate@mrking.demo", role: "affiliate", phone: "7675090687", area: "Guntur", status: "Active", joined: "2026-06-01", agreement: "Accepted" },
-    { id: "MRK-V-2001", name: "Solar Vendor One", email: "vendor@mrking.demo", role: "vendor", phone: "9000000001", area: "Krishna", status: "Verified", joined: "2026-06-03", agreement: "Accepted" },
-    { id: "MRK-AD-001", name: "MR. KING Admin", email: "admin@mrking.demo", role: "admin", phone: "7675090687", area: "Head Office", status: "Owner", joined: "2026-06-01", agreement: "Accepted" },
-  ],
-  leads: [
-    { id: "MRK-L-501", name: "Suresh Babu", phone: "9848012345", district: "Guntur", area: "Guntur Urban", capacity: "3KW", source: "Affiliate", affiliate: "Ravi Kumar", status: "Hot" },
-    { id: "MRK-L-502", name: "Lakshmi Homes", phone: "9912211000", district: "Krishna", area: "Vijayawada", capacity: "5KW", source: "Website", affiliate: "Direct", status: "Pending" },
-    { id: "MRK-L-503", name: "Vijay Kumar", phone: "9700011122", district: "Guntur", area: "Tenali", capacity: "2KW", source: "Affiliate", affiliate: "Ravi Kumar", status: "Closed" },
-  ],
-  orders: [
-    { id: "MRK-O-901", customer: "Suresh Babu", vendor: "Solar Vendor One", capacity: "3KW", value: "Rs. 1,95,000", status: "Site Survey" },
-    { id: "MRK-O-902", customer: "Vijay Kumar", vendor: "Solar Vendor One", capacity: "2KW", value: "Rs. 1,45,000", status: "Installed" },
-    { id: "MRK-O-903", customer: "Lakshmi Homes", vendor: "Pending Assignment", capacity: "5KW", value: "Rs. 3,20,000", status: "Quotation" },
-  ],
-  payouts: [
-    { id: "MRK-P-301", affiliate: "Ravi Kumar", level: "Manager", systems: 3, amount: "Rs. 21,000", method: "UPI", status: "Approved" },
-    { id: "MRK-P-302", affiliate: "Ravi Kumar", level: "Front Line", systems: 10, amount: "Rs. 10,000", method: "Bank Transfer", status: "Pending" },
-  ],
-  applications: [
-    { id: "MRK-APP-701", name: "Ravi Kumar", role: "Affiliate Partner", area: "Guntur", agreement: "Accepted", status: "Approved" },
-    { id: "MRK-APP-702", name: "Solar Vendor One", role: "Vendor / Installer", area: "Krishna", agreement: "Accepted", status: "Verified" },
-  ],
-  topEarners: [
-    { rank: 1, id: "MRK-A-1001", name: "Ravi Kumar", area: "Guntur", systems: 13, income: "Rs. 31,000" },
-    { rank: 2, id: "MRK-A-1004", name: "Kiran Solar Team", area: "Vijayawada", systems: 9, income: "Rs. 24,500" },
-    { rank: 3, id: "MRK-A-1007", name: "Lakshmi Partner", area: "Tenali", systems: 6, income: "Rs. 18,000" },
-  ],
-};
-
-function readState() {
-  const saved = localStorage.getItem(storeKey);
-  if (!saved) {
-    localStorage.setItem(storeKey, JSON.stringify(defaultState));
-    return JSON.parse(JSON.stringify(defaultState));
-  }
-  const state = JSON.parse(saved);
-  const merged = { ...JSON.parse(JSON.stringify(defaultState)), ...state };
-  merged.users = (state.users || defaultState.users).map((user, index) => ({
-    ...user,
-    area: user.area || (user.role === "admin" ? "Head Office" : "Guntur"),
-    agreement: user.agreement || "Accepted",
-    id: user.id && user.id.startsWith("MRK-") ? user.id : nextId(user.role || "affiliate", index + 1),
-  }));
-  merged.leads = (state.leads || defaultState.leads).map((lead, index) => ({
-    ...lead,
-    district: lead.district || lead.area || "Guntur",
-    area: lead.area || "Guntur",
-    id: lead.id && lead.id.startsWith("MRK-") ? lead.id : `MRK-L-${501 + index}`,
-  }));
-  localStorage.setItem(storeKey, JSON.stringify(merged));
-  return merged;
-}
-
-function writeState(state) {
-  localStorage.setItem(storeKey, JSON.stringify(state));
-}
-
-function setSession(user) {
-  localStorage.setItem(sessionKey, JSON.stringify(user));
-}
-
-function getSession() {
-  const saved = localStorage.getItem(sessionKey);
-  return saved ? JSON.parse(saved) : null;
-}
-
-function rolePath(role) {
-  return {
-    affiliate: "/affiliate-panel",
-    vendor: "/vendor-panel",
-    admin: "/admin-panel",
-  }[role] || "/login";
-}
-
-function nextId(role, offset = 0) {
-  const prefix = { affiliate: "MRK-A", vendor: "MRK-V", admin: "MRK-AD" }[role] || "MRK-A";
-  const base = role === "vendor" ? 2000 : role === "admin" ? 1 : 1000;
-  return `${prefix}-${String(base + offset).padStart(role === "admin" ? 3 : 4, "0")}`;
-}
-
-function currencyNumber(value) {
-  return Number(String(value).replace(/[^0-9]/g, "")) || 0;
-}
-
-function badgeClass(status) {
-  const lowered = String(status || "").toLowerCase();
-  if (lowered.includes("hot") || lowered.includes("active") || lowered.includes("approved") || lowered.includes("verified")) return "hot";
-  if (lowered.includes("closed") || lowered.includes("installed") || lowered.includes("owner")) return "closed";
-  return "pending";
-}
-
-document.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-demo-login]");
-  if (!button) return;
-  const role = button.dataset.demoLogin;
-  loginDemoRole(role);
-});
-
-function loginDemoRole(role) {
-  const state = readState();
-  const user = state.users.find((item) => item.role === role);
-  setSession(user);
-  window.location.assign(rolePath(role));
-}
-
-window.mrkingDemoLogin = loginDemoRole;
-
-document.querySelector("[data-login-form]")?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const data = new FormData(form);
-  const role = data.get("role");
-  const email = String(data.get("email") || "").trim().toLowerCase();
-  const state = readState();
-  let user = state.users.find((item) => item.email.toLowerCase() === email && item.role === role);
-
-  if (!user) {
-    user = state.users.find((item) => item.role === role);
-  }
-
-  setSession(user);
-  window.location.href = rolePath(role);
-});
-
-document.querySelector("[data-signup-form]")?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const data = new FormData(form);
-  const role = data.get("role");
-  const state = readState();
-  const user = {
-    id: nextId(role, state.users.filter((item) => item.role === role).length + 1),
-    name: String(data.get("name") || "MR. KING Partner"),
-    email: String(data.get("email") || "").toLowerCase(),
-    phone: String(data.get("phone") || ""),
-    area: String(data.get("area") || ""),
-    role,
-    status: role === "vendor" ? "Pending Verification" : "Active",
-    joined: new Date().toISOString().slice(0, 10),
-    agreement: data.get("agreement") ? "Accepted" : "Pending",
-  };
-
-  state.users.push(user);
-  state.applications.unshift({
-    id: `MRK-APP-${Date.now().toString().slice(-4)}`,
-    name: user.name,
-    role: role === "vendor" ? "Vendor / Installer" : role === "admin" ? "Admin Team" : "Affiliate Partner",
-    area: user.area || "Not mentioned",
-    agreement: user.agreement,
-    status: role === "vendor" ? "Verification Pending" : "Submitted",
-  });
-  writeState(state);
-  setSession(user);
-  window.location.href = rolePath(role);
-});
-
-function requireRole(role) {
-  let user = getSession();
-  if (!user || user.role !== role) {
-    const state = readState();
-    user = state.users.find((item) => item.role === role);
-    setSession(user);
-  }
-  document.querySelectorAll("[data-user-name]").forEach((item) => (item.textContent = user.name));
-  document.querySelectorAll("[data-user-role]").forEach((item) => (item.textContent = user.role));
-  return user;
-}
-
-document.querySelectorAll("[data-logout]").forEach((button) => {
-  button.addEventListener("click", () => {
-    localStorage.removeItem(sessionKey);
-    window.location.href = "/login";
-  });
-});
-
-function renderAffiliatePanel(user) {
-  const state = readState();
-  const myLeads = state.leads.filter((lead) => lead.affiliate === user.name || lead.source === "Affiliate");
-  const closed = myLeads.filter((lead) => lead.status === "Closed").length;
-  const pending = myLeads.filter((lead) => lead.status !== "Closed").length;
-  const projectedIncome = closed * 7000 + pending * 1500;
-  const nextGoal = closed >= 75 ? "MR. KING Club: reach 100 systems" : closed >= 30 ? "Director: reach 75 systems" : closed >= 10 ? "Manager: reach 30 systems" : "Supervisor: reach 10 systems";
-
-  document.querySelector("[data-metric='leads']").textContent = myLeads.length;
-  document.querySelector("[data-metric='closed']").textContent = closed;
-  document.querySelector("[data-metric='income']").textContent = projectedIncome.toLocaleString("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
-  document.querySelector("[data-metric='level']").textContent = closed >= 30 ? "Manager" : closed >= 10 ? "Supervisor" : "Agent";
-  document.querySelector("[data-referral-link]").textContent = `https://mrking-eight.vercel.app/signup?ref=${encodeURIComponent(user.id)}`;
-  document.querySelectorAll("[data-user-id]").forEach((item) => (item.textContent = user.id));
-  document.querySelectorAll("[data-next-goal]").forEach((item) => (item.textContent = nextGoal));
-
-  const rows = myLeads.map((lead) => `<tr><td>${lead.id}</td><td>${lead.name}</td><td>${lead.phone}</td><td>${lead.district || lead.area}</td><td>${lead.area}</td><td>${lead.capacity}</td><td><span class="status-pill ${badgeClass(lead.status)}">${lead.status}</span></td></tr>`).join("");
-  document.querySelector("[data-affiliate-leads]").innerHTML = rows;
-  document.querySelector("[data-affiliate-payments]").innerHTML = state.payouts.filter((payout) => payout.affiliate === user.name).map((payout) => `<tr><td>${payout.id}</td><td>${payout.level}</td><td>${payout.systems}</td><td>${payout.amount}</td><td>${payout.method || "Bank Transfer"}</td><td><span class="status-pill ${badgeClass(payout.status)}">${payout.status}</span></td></tr>`).join("");
-  document.querySelector("[data-top-earners]").innerHTML = state.topEarners.map((earner) => `<li><strong>#${earner.rank} ${earner.name}</strong><span>${earner.area} · ${earner.systems} systems · ${earner.income}</span></li>`).join("");
-
-  document.querySelector("[data-lead-form]")?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    state.leads.unshift({
-      id: `MRK-L-${Date.now().toString().slice(-4)}`,
-      name: data.get("name"),
-      phone: data.get("phone"),
-      district: data.get("district"),
-      area: data.get("area"),
-      capacity: data.get("capacity"),
-      source: "Affiliate",
-      affiliate: user.name,
-      status: "Pending",
-    });
-    writeState(state);
-    window.location.reload();
-  });
-}
-
-function renderVendorPanel(user) {
-  const state = readState();
-  const vendorOrders = state.orders.filter((order) => order.vendor === user.name || order.vendor === "Solar Vendor One");
-  const pipeline = vendorOrders.reduce((sum, order) => sum + currencyNumber(order.value), 0);
-  document.querySelector("[data-metric='orders']").textContent = vendorOrders.length;
-  document.querySelector("[data-metric='installed']").textContent = vendorOrders.filter((order) => order.status === "Installed").length;
-  document.querySelector("[data-metric='pipeline']").textContent = pipeline.toLocaleString("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
-  document.querySelector("[data-metric='rating']").textContent = "4.8";
-
-  document.querySelector("[data-vendor-orders]").innerHTML = vendorOrders.map((order) => `<tr><td>${order.id}</td><td>${order.customer}</td><td>${order.capacity}</td><td>${order.value}</td><td><span class="status-pill ${badgeClass(order.status)}">${order.status}</span></td></tr>`).join("");
-}
-
-function renderAdminPanel() {
-  const state = readState();
-  document.querySelector("[data-metric='users']").textContent = state.users.length;
-  document.querySelector("[data-metric='leads']").textContent = state.leads.length;
-  document.querySelector("[data-metric='orders']").textContent = state.orders.length;
-  document.querySelector("[data-metric='payouts']").textContent = state.payouts.length;
-
-  document.querySelector("[data-admin-users]").innerHTML = state.users.map((user) => `<tr><td>${user.id}</td><td>${user.name}</td><td>${user.role}</td><td>${user.phone}</td><td><span class="status-pill ${badgeClass(user.status)}">${user.status}</span></td></tr>`).join("");
-  document.querySelector("[data-admin-leads]").innerHTML = state.leads.map((lead) => `<tr><td>${lead.id}</td><td>${lead.name}</td><td>${lead.phone}</td><td>${lead.district || lead.area}</td><td>${lead.area}</td><td>${lead.capacity}</td><td><span class="status-pill ${badgeClass(lead.status)}">${lead.status}</span></td></tr>`).join("");
-  document.querySelector("[data-admin-orders]").innerHTML = state.orders.map((order) => `<tr><td>${order.id}</td><td>${order.customer}</td><td>${order.vendor}</td><td>${order.capacity}</td><td>${order.value}</td><td><span class="status-pill ${badgeClass(order.status)}">${order.status}</span></td></tr>`).join("");
-  document.querySelector("[data-admin-payouts]").innerHTML = state.payouts.map((payout) => `<tr><td>${payout.id}</td><td>${payout.affiliate}</td><td>${payout.level}</td><td>${payout.systems}</td><td>${payout.amount}</td><td>${payout.method || "Bank Transfer"}</td><td><span class="status-pill ${badgeClass(payout.status)}">${payout.status}</span></td></tr>`).join("");
-  document.querySelector("[data-admin-applications]").innerHTML = state.applications.map((application) => `<tr><td>${application.id}</td><td>${application.name}</td><td>${application.role}</td><td>${application.area}</td><td>${application.agreement}</td><td><span class="status-pill ${badgeClass(application.status)}">${application.status}</span></td></tr>`).join("");
-  document.querySelector("[data-admin-earners]").innerHTML = state.topEarners.map((earner) => `<tr><td>#${earner.rank}</td><td>${earner.id}</td><td>${earner.name}</td><td>${earner.area}</td><td>${earner.systems}</td><td>${earner.income}</td></tr>`).join("");
-
-  document.querySelectorAll("[data-admin-tab]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const target = button.dataset.adminTab;
-      document.querySelectorAll("[data-admin-tab]").forEach((item) => item.classList.toggle("active", item === button));
-      document.querySelectorAll(".admin-section").forEach((section) => section.classList.toggle("active", section.id === target));
-    });
-  });
-}
-
-const panel = document.body.dataset.panel;
-if (panel === "affiliate") {
-  const user = requireRole("affiliate");
-  if (user) renderAffiliatePanel(user);
-}
-if (panel === "vendor") {
-  const user = requireRole("vendor");
-  if (user) renderVendorPanel(user);
-}
-if (panel === "admin") {
-  const user = requireRole("admin");
-  if (user) renderAdminPanel(user);
-}
+const storeKey="mrkingPortalState",sessionKey="mrkingPortalUser";
+const positions=["Agent","Supervisor","Manager","Director","MR. KING Club Member"];
+document.body.dataset.portalReady="true";
+const defaultState={
+users:[
+{id:"MRK-A-1001",name:"Ravi Kumar",email:"affiliate@mrking.demo",role:"affiliate",phone:"7675090687",area:"Guntur",accountType:"Proprietorship",position:"Manager",status:"Active",joined:"2026-06-01",agreement:"Accepted"},
+{id:"MRK-V-2001",name:"Solar Vendor One",email:"vendor@mrking.demo",role:"vendor",phone:"9000000001",area:"Krishna",accountType:"Business (B2B)",position:"-",status:"Verified",joined:"2026-06-03",agreement:"Accepted"},
+{id:"MRK-AD-001",name:"MR. KING Admin",email:"admin@mrking.demo",role:"admin",phone:"7675090687",area:"Head Office",accountType:"Proprietorship",position:"Owner",status:"Owner",joined:"2026-06-01",agreement:"Accepted"}],
+leads:[
+{id:"MRK-L-501",name:"Suresh Babu",phone:"9848012345",customerType:"B2C",district:"Guntur",area:"Guntur Urban",capacity:"3KW",source:"Affiliate",affiliate:"Ravi Kumar",affiliateId:"MRK-A-1001",status:"Hot"},
+{id:"MRK-L-502",name:"Lakshmi Homes",phone:"9912211000",customerType:"B2B",district:"Krishna",area:"Vijayawada",capacity:"5KW",source:"Website",affiliate:"Direct",affiliateId:"",status:"Pending"},
+{id:"MRK-L-503",name:"Vijay Kumar",phone:"9700011122",customerType:"B2C",district:"Guntur",area:"Tenali",capacity:"2KW",source:"Affiliate",affiliate:"Ravi Kumar",affiliateId:"MRK-A-1001",status:"Closed"}],
+orders:[
+{id:"MRK-O-901",customer:"Suresh Babu",vendor:"Solar Vendor One",capacity:"3KW",value:"Rs. 1,95,000",status:"Site Survey"},
+{id:"MRK-O-902",customer:"Vijay Kumar",vendor:"Solar Vendor One",capacity:"2KW",value:"Rs. 1,45,000",status:"Installed"},
+{id:"MRK-O-903",customer:"Lakshmi Homes",vendor:"Pending Assignment",capacity:"5KW",value:"Rs. 3,20,000",status:"Quotation"}],
+payouts:[
+{id:"MRK-P-301",affiliate:"Ravi Kumar",affiliateId:"MRK-A-1001",level:"Manager",systems:3,amount:21000,method:"UPI",status:"Approved"},
+{id:"MRK-P-302",affiliate:"Ravi Kumar",affiliateId:"MRK-A-1001",level:"Front Line",systems:10,amount:10000,method:"Bank Transfer",status:"Pending"}],
+withdrawals:[],
+applications:[
+{id:"MRK-APP-701",name:"Ravi Kumar",role:"Affiliate Partner",accountType:"Proprietorship",area:"Guntur",referralCode:"Direct",agreement:"Accepted",status:"Approved"},
+{id:"MRK-APP-702",name:"Solar Vendor One",role:"Vendor / Installer",accountType:"Business (B2B)",area:"Krishna",referralCode:"Direct",agreement:"Accepted",status:"Verified"}],
+referrals:[
+{id:"MRK-R-401",sponsorId:"MRK-A-1001",sponsor:"Ravi Kumar",referredId:"MRK-A-1010",referredName:"Kiran Solar Team",accountType:"Business (B2B)",date:"2026-06-12",commission:500,status:"Approved"},
+{id:"MRK-R-402",sponsorId:"MRK-A-1001",sponsor:"Ravi Kumar",referredId:"MRK-A-1011",referredName:"Lakshmi Partner",accountType:"Individual",date:"2026-06-18",commission:500,status:"Pending"}],
+commissionSettings:{directCommission:5000,signupCommission:500,tdsRate:5,gateway:"Razorpay / UPI"},
+topEarners:[
+{rank:1,id:"MRK-A-1001",name:"Ravi Kumar",area:"Guntur",systems:13,income:"Rs. 31,000"},
+{rank:2,id:"MRK-A-1004",name:"Kiran Solar Team",area:"Vijayawada",systems:9,income:"Rs. 24,500"},
+{rank:3,id:"MRK-A-1007",name:"Lakshmi Partner",area:"Tenali",systems:6,income:"Rs. 18,000"}]};
+const clone=v=>JSON.parse(JSON.stringify(v));
+const num=v=>Number(String(v).replace(/[^0-9.]/g,""))||0;
+const money=v=>"Rs. "+Math.round(Number(v)||0).toLocaleString("en-IN");
+const esc=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+const tax=(gross,rate)=>{const g=num(gross),tds=Math.round(g*(Number(rate)||0)/100);return{gross:g,tds,net:g-tds}};
+const badge=s=>{s=String(s||"").toLowerCase();return /hot|active|approved|verified|paid/.test(s)?"hot":/closed|installed|owner/.test(s)?"closed":"pending"};
+function nextId(role,n=0){const p={affiliate:"MRK-A",vendor:"MRK-V",admin:"MRK-AD"}[role]||"MRK-A",b=role==="vendor"?2000:role==="admin"?1:1000;return p+"-"+String(b+n).padStart(role==="admin"?3:4,"0")}
+function writeState(s){localStorage.setItem(storeKey,JSON.stringify(s))}
+function readState(){
+let old={};try{old=JSON.parse(localStorage.getItem(storeKey)||"{}")}catch{}
+const s={...clone(defaultState),...old};
+s.commissionSettings={...defaultState.commissionSettings,...(old.commissionSettings||{})};
+s.users=(old.users||defaultState.users).map((u,i)=>({...u,id:u.id?.startsWith("MRK-")?u.id:nextId(u.role||"affiliate",i+1),area:u.area||(u.role==="admin"?"Head Office":"Guntur"),accountType:u.accountType||"Individual",position:u.position||(u.role==="affiliate"?"Agent":u.role==="admin"?"Owner":"-"),agreement:u.agreement||"Accepted"}));
+s.leads=(old.leads||defaultState.leads).map((l,i)=>({...l,id:l.id?.startsWith("MRK-")?l.id:"MRK-L-"+(501+i),customerType:l.customerType||(l.capacity==="Commercial"?"B2B":"B2C"),district:l.district||l.area||"Guntur",area:l.area||"Guntur",affiliateId:l.affiliateId||""}));
+s.payouts=(old.payouts||defaultState.payouts).map(p=>{const id=p.id?.startsWith("MRK-")?p.id:"MRK-"+(p.id||"P-"+Date.now().toString().slice(-3)),fallback={"P-301":21000,"P-302":10000,"MRK-P-301":21000,"MRK-P-302":10000}[id]||{"P-301":21000,"P-302":10000}[p.id]||0;const parsed=num(p.amount??p.gross??p.commission??p.netAmount??p.total);return{...p,id,amount:parsed>=1?parsed:fallback,affiliateId:p.affiliateId||"",method:p.method||p.gateway||s.commissionSettings.gateway}});
+s.withdrawals=(old.withdrawals||[]).map(w=>({...w,amount:num(w.amount)}));
+s.applications=(old.applications||defaultState.applications).map(a=>({...a,accountType:a.accountType||"Individual",referralCode:a.referralCode||"Direct"}));
+s.referrals=(old.referrals||defaultState.referrals).map(r=>({...r,commission:num(r.commission),accountType:r.accountType||"Individual"}));
+s.orders=old.orders||clone(defaultState.orders);s.topEarners=old.topEarners||clone(defaultState.topEarners);writeState(s);return s}
+const setSession=u=>localStorage.setItem(sessionKey,JSON.stringify(u));
+const getSession=()=>{try{return JSON.parse(localStorage.getItem(sessionKey)||"null")}catch{return null}};
+const rolePath=r=>({affiliate:"/affiliate-panel",vendor:"/vendor-panel",admin:"/admin-panel"}[r]||"/login");
+function loginDemoRole(role){const u=readState().users.find(x=>x.role===role);setSession(u);location.assign(rolePath(role))}
+window.mrkingDemoLogin=loginDemoRole;
+document.addEventListener("click",e=>{const b=e.target.closest("[data-demo-login]");if(b)loginDemoRole(b.dataset.demoLogin)});
+const refInput=document.querySelector("[data-referral-input]");
+if(refInput){refInput.value=(new URLSearchParams(location.search).get("ref")||"").toUpperCase();const n=document.querySelector("[data-referral-note]"),show=()=>n.textContent=refInput.value.trim()?"Referral linked to partner code "+refInput.value.trim().toUpperCase()+".":"No referral code applied.";refInput.addEventListener("input",show);show()}
+document.querySelector("[data-login-form]")?.addEventListener("submit",e=>{e.preventDefault();const d=new FormData(e.currentTarget),s=readState(),role=d.get("role"),email=String(d.get("email")||"").toLowerCase(),u=s.users.find(x=>x.role===role&&x.email.toLowerCase()===email)||s.users.find(x=>x.role===role);setSession(u);location.href=rolePath(role)});
+document.querySelector("[data-signup-form]")?.addEventListener("submit",e=>{e.preventDefault();const d=new FormData(e.currentTarget),s=readState(),role=String(d.get("role")||"affiliate"),code=String(d.get("referralCode")||"").trim().toUpperCase(),sponsor=s.users.find(x=>x.role==="affiliate"&&x.id.toUpperCase()===code),u={id:nextId(role,s.users.filter(x=>x.role===role).length+1),name:String(d.get("name")||"MR. KING Partner"),email:String(d.get("email")||"").toLowerCase(),phone:String(d.get("phone")||""),area:String(d.get("area")||""),accountType:String(d.get("accountType")||"Individual"),sponsorId:sponsor?.id||"",role,position:role==="affiliate"?"Agent":role==="admin"?"Owner":"-",status:role==="vendor"?"Pending Verification":"Active",joined:new Date().toISOString().slice(0,10),agreement:d.get("agreement")?"Accepted":"Pending"};s.users.push(u);s.applications.unshift({id:"MRK-APP-"+Date.now().toString().slice(-4),name:u.name,role:role==="vendor"?"Vendor / Installer":role==="admin"?"Admin Team":"Affiliate Partner",accountType:u.accountType,area:u.area||"Not mentioned",referralCode:sponsor?.id||code||"Direct",agreement:u.agreement,status:role==="vendor"?"Verification Pending":"Submitted"});if(sponsor)s.referrals.unshift({id:"MRK-R-"+Date.now().toString().slice(-4),sponsorId:sponsor.id,sponsor:sponsor.name,referredId:u.id,referredName:u.name,accountType:u.accountType,date:u.joined,commission:s.commissionSettings.signupCommission,status:"Pending"});writeState(s);setSession(u);location.href=rolePath(role)});
+function requireRole(role){const s=readState(),session=getSession();let u=session?s.users.find(x=>x.id===session.id&&x.role===role):null;if(!u)u=s.users.find(x=>x.role===role);setSession(u);document.querySelectorAll("[data-user-name]").forEach(x=>x.textContent=u.name);document.querySelectorAll("[data-user-role]").forEach(x=>x.textContent=u.role);return u}
+document.querySelectorAll("[data-logout]").forEach(b=>b.addEventListener("click",()=>{localStorage.removeItem(sessionKey);location.href="/login"}));
+const posFrom=n=>n>=100?"MR. KING Club Member":n>=75?"Director":n>=30?"Manager":n>=10?"Supervisor":"Agent";
+function goal(pos,n){const g={Agent:["Supervisor: reach 10 systems",10],Supervisor:["Manager: reach 30 systems",30],Manager:["Director: reach 75 systems",75],Director:["MR. KING Club: reach 100 systems",100],"MR. KING Club Member":["Club member target achieved",Math.max(n,100)]};return g[pos]||g.Agent}
+function renderAffiliate(u){
+const s=readState(),cfg=s.commissionSettings,leads=s.leads.filter(l=>l.affiliateId===u.id||(!l.affiliateId&&l.affiliate===u.name)),pays=s.payouts.filter(p=>p.affiliateId===u.id||(!p.affiliateId&&p.affiliate===u.name)),refs=s.referrals.filter(r=>r.sponsorId===u.id),withdraw=s.withdrawals.filter(w=>w.affiliateId===u.id),closed=leads.filter(l=>l.status==="Closed").length,pos=u.position&&u.position!=="Agent"?u.position:posFrom(closed),g=goal(pos,closed);
+const pg=pays.reduce((a,x)=>a+num(x.amount),0),rg=refs.reduce((a,x)=>a+num(x.commission),0),gross=pg+rg,t=tax(gross,cfg.tdsRate),used=withdraw.reduce((a,x)=>a+num(x.amount),0),net=Math.max(0,t.net-used),pending=pays.filter(x=>!["Approved","Paid"].includes(x.status)).reduce((a,x)=>a+num(x.amount),0)+refs.filter(x=>!["Approved","Paid"].includes(x.status)).reduce((a,x)=>a+num(x.commission),0),approved=pays.filter(x=>["Approved","Paid"].includes(x.status)).reduce((a,x)=>a+num(x.amount),0)+refs.filter(x=>["Approved","Paid"].includes(x.status)).reduce((a,x)=>a+num(x.commission),0),available=Math.max(0,tax(approved,cfg.tdsRate).net-used);
+document.querySelector("[data-metric='leads']").textContent=leads.length;document.querySelector("[data-metric='closed']").textContent=closed;document.querySelector("[data-metric='income']").textContent=money(net);document.querySelector("[data-metric='level']").textContent=pos;
+const link=location.origin+"/signup?ref="+encodeURIComponent(u.id);document.querySelector("[data-referral-link]").textContent=link;document.querySelector("[data-referral-code]").textContent=u.id;document.querySelectorAll("[data-user-id]").forEach(x=>x.textContent=u.id);document.querySelectorAll("[data-next-goal]").forEach(x=>x.textContent=g[0]);document.querySelector("[data-goal-progress]").style.width=Math.min(100,Math.round(closed/g[1]*100))+"%";document.querySelectorAll("[data-tds-label]").forEach(x=>x.textContent=cfg.tdsRate+"%");
+document.querySelector("[data-wallet='gross']").textContent=money(gross);document.querySelector("[data-wallet='tds']").textContent=money(t.tds);document.querySelector("[data-wallet='net']").textContent=money(net);document.querySelector("[data-wallet='pending']").textContent=money(tax(pending,cfg.tdsRate).net);
+document.querySelector("[data-affiliate-leads]").innerHTML=leads.map(l=>`<tr><td>${esc(l.id)}</td><td>${esc(l.name)}</td><td>${esc(l.customerType)}</td><td>${esc(l.phone)}</td><td>${esc(l.district)}</td><td>${esc(l.area)}</td><td>${esc(l.capacity)}</td><td><span class="status-pill ${badge(l.status)}">${esc(l.status)}</span></td></tr>`).join("")||'<tr><td colspan="8">No leads added yet.</td></tr>';
+document.querySelector("[data-affiliate-referrals]").innerHTML=refs.map(r=>`<tr><td>${esc(r.id)}</td><td>${esc(r.referredName)}</td><td>${esc(r.accountType)}</td><td>${esc(r.date)}</td><td>${money(r.commission)}</td><td><span class="status-pill ${badge(r.status)}">${esc(r.status)}</span></td></tr>`).join("")||'<tr><td colspan="6">Share your link or unique code to start tracking referrals.</td></tr>';
+const rows=pays.map(p=>{const x=tax(p.amount,cfg.tdsRate);return `<tr><td>${esc(p.id)}</td><td>${esc(p.level)}</td><td>${esc(p.systems)}</td><td>${money(x.gross)}</td><td>${money(x.tds)}</td><td>${money(x.net)}</td><td>${esc(p.method)}</td><td><span class="status-pill ${badge(p.status)}">${esc(p.status)}</span></td></tr>`}).concat(withdraw.map(w=>`<tr><td>${esc(w.id)}</td><td>Wallet Request</td><td>-</td><td>-</td><td>-</td><td>${money(w.amount)}</td><td>${esc(w.method)}</td><td><span class="status-pill ${badge(w.status)}">${esc(w.status)}</span></td></tr>`));document.querySelector("[data-affiliate-payments]").innerHTML=rows.join("")||'<tr><td colspan="8">No payment entries yet.</td></tr>';
+document.querySelector("[data-top-earners]").innerHTML=s.topEarners.map(x=>`<li><strong>#${x.rank} ${esc(x.name)}</strong><span>${esc(x.area)} | ${x.systems} systems | ${esc(x.income)}</span></li>`).join("");
+const gs=document.querySelector("[data-gateway-options]");gs.innerHTML=[...new Set([cfg.gateway,"UPI","Bank Transfer"])].map(x=>`<option>${esc(x)}</option>`).join("");
+document.querySelector("[data-copy-referral]")?.addEventListener("click",async e=>{try{await navigator.clipboard.writeText(link);e.currentTarget.textContent="Copied"}catch{e.currentTarget.textContent="Copy failed"}});
+document.querySelector("[data-lead-form]")?.addEventListener("submit",e=>{e.preventDefault();const d=new FormData(e.currentTarget);s.leads.unshift({id:"MRK-L-"+Date.now().toString().slice(-4),name:String(d.get("name")||""),phone:String(d.get("phone")||""),customerType:String(d.get("customerType")||"B2C"),district:String(d.get("district")||""),area:String(d.get("area")||""),capacity:String(d.get("capacity")||""),source:"Affiliate",affiliate:u.name,affiliateId:u.id,status:"Pending"});writeState(s);location.reload()});
+document.querySelector("[data-withdraw-form]")?.addEventListener("submit",e=>{e.preventDefault();const d=new FormData(e.currentTarget),amount=num(d.get("amount")),msg=document.querySelector("[data-withdraw-status]");if(amount<=0||amount>available){msg.textContent="Available approved balance: "+money(available)+".";msg.classList.add("error");return}s.withdrawals.unshift({id:"MRK-W-"+Date.now().toString().slice(-4),affiliate:u.name,affiliateId:u.id,amount,method:String(d.get("method")||cfg.gateway),account:String(d.get("account")||""),date:new Date().toISOString().slice(0,10),status:"Pending"});writeState(s);location.reload()})}
+function renderVendor(u){const s=readState(),o=s.orders.filter(x=>x.vendor===u.name||x.vendor==="Solar Vendor One"),v=o.reduce((a,x)=>a+num(x.value),0);document.querySelector("[data-metric='orders']").textContent=o.length;document.querySelector("[data-metric='installed']").textContent=o.filter(x=>x.status==="Installed").length;document.querySelector("[data-metric='pipeline']").textContent=money(v);document.querySelector("[data-metric='rating']").textContent="4.8";document.querySelector("[data-vendor-orders]").innerHTML=o.map(x=>`<tr><td>${esc(x.id)}</td><td>${esc(x.customer)}</td><td>${esc(x.capacity)}</td><td>${esc(x.value)}</td><td><span class="status-pill ${badge(x.status)}">${esc(x.status)}</span></td></tr>`).join("")}
+const posSelect=u=>u.role!=="affiliate"?esc(u.position||"-"):`<select class="table-control" data-position-id="${esc(u.id)}">${positions.map(p=>`<option${p===u.position?" selected":""}>${esc(p)}</option>`).join("")}</select>`;
+function renderAdmin(){
+const s=readState(),cfg=s.commissionSettings;document.querySelector("[data-metric='users']").textContent=s.users.length;document.querySelector("[data-metric='leads']").textContent=s.leads.length;document.querySelector("[data-metric='orders']").textContent=s.orders.length;document.querySelector("[data-metric='payouts']").textContent=s.payouts.length+s.withdrawals.length;
+document.querySelector("[data-admin-users]").innerHTML=s.users.map(u=>`<tr><td>${esc(u.id)}</td><td>${esc(u.name)}</td><td>${esc(u.role)}</td><td>${esc(u.accountType)}</td><td>${esc(u.phone)}</td><td>${posSelect(u)}</td><td><span class="status-pill ${badge(u.status)}">${esc(u.status)}</span></td></tr>`).join("");
+document.querySelector("[data-admin-leads]").innerHTML=s.leads.map(l=>`<tr><td>${esc(l.id)}</td><td>${esc(l.name)}</td><td>${esc(l.customerType)}</td><td>${esc(l.phone)}</td><td>${esc(l.district)}</td><td>${esc(l.area)}</td><td>${esc(l.capacity)}</td><td><span class="status-pill ${badge(l.status)}">${esc(l.status)}</span></td></tr>`).join("");
+document.querySelector("[data-admin-orders]").innerHTML=s.orders.map(o=>`<tr><td>${esc(o.id)}</td><td>${esc(o.customer)}</td><td>${esc(o.vendor)}</td><td>${esc(o.capacity)}</td><td>${esc(o.value)}</td><td><span class="status-pill ${badge(o.status)}">${esc(o.status)}</span></td></tr>`).join("");
+const prows=s.payouts.map(p=>{const x=tax(p.amount,cfg.tdsRate);return `<tr><td>${esc(p.id)}</td><td>${esc(p.affiliate)}</td><td>${esc(p.level)}</td><td>${esc(p.systems)}</td><td>${money(x.gross)}</td><td>${money(x.tds)}</td><td>${money(x.net)}</td><td>${esc(p.method)}</td><td><span class="status-pill ${badge(p.status)}">${esc(p.status)}</span></td></tr>`}).concat(s.withdrawals.map(w=>`<tr><td>${esc(w.id)}</td><td>${esc(w.affiliate)}</td><td>Wallet Request</td><td>-</td><td>-</td><td>-</td><td>${money(w.amount)}</td><td>${esc(w.method)}</td><td><span class="status-pill ${badge(w.status)}">${esc(w.status)}</span></td></tr>`));document.querySelector("[data-admin-payouts]").innerHTML=prows.join("");
+document.querySelector("[data-admin-applications]").innerHTML=s.applications.map(a=>`<tr><td>${esc(a.id)}</td><td>${esc(a.name)}</td><td>${esc(a.role)}</td><td>${esc(a.accountType)}</td><td>${esc(a.area)}</td><td>${esc(a.referralCode)}</td><td>${esc(a.agreement)}</td><td><span class="status-pill ${badge(a.status)}">${esc(a.status)}</span></td></tr>`).join("");
+document.querySelector("[data-admin-referrals]").innerHTML=s.referrals.map(r=>`<tr><td>${esc(r.id)}</td><td>${esc(r.sponsor)}<br><small>${esc(r.sponsorId)}</small></td><td>${esc(r.referredName)}<br><small>${esc(r.referredId)}</small></td><td>${esc(r.accountType)}</td><td>${money(r.commission)}</td><td><select class="table-control" data-referral-status="${esc(r.id)}">${["Pending","Approved","Rejected","Paid"].map(x=>`<option${x===r.status?" selected":""}>${x}</option>`).join("")}</select></td></tr>`).join("");
+document.querySelector("[data-admin-earners]").innerHTML=s.topEarners.map(x=>`<tr><td>#${x.rank}</td><td>${esc(x.id)}</td><td>${esc(x.name)}</td><td>${esc(x.area)}</td><td>${x.systems}</td><td>${esc(x.income)}</td></tr>`).join("");
+document.querySelectorAll("[data-position-id]").forEach(x=>x.addEventListener("change",()=>{const u=s.users.find(u=>u.id===x.dataset.positionId);if(u){u.position=x.value;writeState(s)}}));document.querySelectorAll("[data-referral-status]").forEach(x=>x.addEventListener("change",()=>{const r=s.referrals.find(r=>r.id===x.dataset.referralStatus);if(r){r.status=x.value;writeState(s)}}));
+const f=document.querySelector("[data-commission-form]");f.elements.directCommission.value=cfg.directCommission;f.elements.signupCommission.value=cfg.signupCommission;f.elements.tdsRate.value=cfg.tdsRate;f.elements.gateway.value=cfg.gateway;f.addEventListener("submit",e=>{e.preventDefault();const d=new FormData(f);s.commissionSettings={directCommission:num(d.get("directCommission")),signupCommission:num(d.get("signupCommission")),tdsRate:Math.max(0,Math.min(100,Number(d.get("tdsRate"))||0)),gateway:String(d.get("gateway")||"UPI")};s.referrals.forEach(r=>{if(r.status==="Pending")r.commission=s.commissionSettings.signupCommission});writeState(s);document.querySelector("[data-commission-status]").textContent="Commission, TDS, and gateway settings saved."});
+document.querySelectorAll("[data-admin-tab]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-admin-tab]").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".admin-section").forEach(x=>x.classList.toggle("active",x.id===b.dataset.adminTab))}))}
+const panel=document.body.dataset.panel;if(panel==="affiliate")renderAffiliate(requireRole("affiliate"));if(panel==="vendor")renderVendor(requireRole("vendor"));if(panel==="admin"){requireRole("admin");renderAdmin()}

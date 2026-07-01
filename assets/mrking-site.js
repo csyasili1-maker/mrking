@@ -5,10 +5,17 @@ const header = document.querySelector(".site-header");
 
 document.body.classList.add("loading");
 
-window.addEventListener("load", () => {
+function finishLoading() {
   document.body.classList.remove("loading");
   document.body.classList.add("ready");
-});
+}
+
+if (document.readyState === "complete") {
+  finishLoading();
+} else {
+  window.addEventListener("load", finishLoading, { once: true });
+  setTimeout(finishLoading, 900);
+}
 
 if (toggle && nav) {
   toggle.addEventListener("click", () => {
